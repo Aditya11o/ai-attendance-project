@@ -31,16 +31,21 @@ def show_attendance_result(df, logs):
     with col1:
         if st.button('Discard', icon=st_icon('close'), width='stretch'):
             st.session_state.voice_attendance_results = None
+            st.session_state.voice_attendance_meta = None
             st.session_state.attendance_images = []
             st.rerun()
 
     with col2:
         if st.button('Confirm & Save', width='stretch', type='primary', icon=st_icon('done')):
             try:
-                create_attendance(logs)
-                st.toast("Attendance taken", icon=st_icon('attended'))
+                inserted = create_attendance(logs)
+                if inserted:
+                    st.toast("Attendance taken", icon=st_icon('attended'))
+                else:
+                    st.toast("Attendance already saved for this session", icon=st_icon('info'))
                 st.session_state.attendance_images = []
                 st.session_state.voice_attendance_results = None
+                st.session_state.voice_attendance_meta = None
                 st.rerun()
             except Exception as e:
                 st.error('Sync failed!', icon=st_icon('error'))
