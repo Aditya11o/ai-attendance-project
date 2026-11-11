@@ -1,6 +1,8 @@
 import html as html_lib
 import streamlit as st
 
+from src.components.icons import ICONS, html_icon
+
 
 def subject_card(name, code, section, stats=None, footer_callback=None):
     safe_name = html_lib.escape(str(name))
@@ -21,7 +23,17 @@ def subject_card(name, code, section, stats=None, footer_callback=None):
         for icon, label, value in stats:
             safe_label = html_lib.escape(str(label))
             safe_value = html_lib.escape(str(value))
-            html+= f'<div class="subject-card-stat-badge" style="background: #EB459E10; padding:5px 12px; border-radius:12px; font-size:0.9rem">{icon} <b class="subject-card-stat-value">{safe_value}</b> {safe_label} </div>'
+            rendered_icon = (
+                html_icon(icon, size="sm")
+                if icon in ICONS
+                else html_lib.escape(str(icon))
+            )
+            html += (
+                '<div class="subject-card-stat-badge" '
+                'style="background: #EB459E10; padding:5px 12px; border-radius:12px; font-size:0.9rem">'
+                f'{rendered_icon}<b class="subject-card-stat-value">{safe_value}</b> {safe_label}'
+                '</div>'
+            )
         
         html+= "</div>"
 

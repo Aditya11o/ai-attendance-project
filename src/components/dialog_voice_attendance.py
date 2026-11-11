@@ -1,4 +1,5 @@
 import streamlit as st
+from src.components.icons import st_icon
 
 from src.pipelines.voice_pipeline import process_bulk_audio
 
@@ -13,18 +14,38 @@ from datetime import datetime
 def voice_attendance_dialog(selected_subject_id):
     st.write('Record audio of students saying I am present. Then AI will recognize the students')
 
-
-    audio_data = None
+    if st.session_state.get('voice_attendance_subject_id') != selected_subject_id:
+        st.session_state.voice_attendance_results = None
+        st.session_state.voice_attendance_subject_id = selected_subject_id
 
     audio_data = st.audio_input("Record classroom audio")
 
-    if st.button('Analyze Audio', width='stretch', type='primary'):
-        with st.spinner('Prcessing Audio data'):
+    if st.button(
+        'Analyze Audio',
+        width='stretch',
+        type='primary',
+        icon=st_icon('mic'),
+        disabled=audio_data is None,
+    ):
+        if audio_data is None:
+            st.warning('Please record classroom audio before analyzing.', icon=st_icon('warning'))
+            return
+
+        audio_bytes = (
+            audio_data.getvalue()
+            if hasattr(audio_data, 'getvalue')
+            else audio_data.read()
+        )
+        if not audio_bytes:
+            st.warning('Recorded audio is empty. Please record again.', icon=st_icon('warning'))
+            return
+
+        with st.spinner('Processing audio data...'):
             enrolled_res = supabase.table('subject_students').select("*, students(*)").eq('subject_id',selected_subject_id ).execute()
             enrolled_students = enrolled_res.data
 
             if not enrolled_students:
-                st.warning('No students enrolled in this course')
+                st.warning('No students enrolled in this course', icon=st_icon('warning'))
                 return
             candidates_dict = {
                 s['students']['student_id'] : s['students']['voice_embedding'] 
@@ -32,10 +53,8 @@ def voice_attendance_dialog(selected_subject_id):
             }
 
             if not candidates_dict:
-                st.error('No enrolled students have voice profiles registerd')
+                st.error('No enrolled students have voice profiles registered', icon=st_icon('error'))
                 return
-            
-            audio_bytes = audio_data.read()
 
             detected_scores = process_bulk_audio(audio_bytes, candidates_dict)
 
@@ -52,8 +71,8 @@ def voice_attendance_dialog(selected_subject_id):
                 results.append({
                     "Name": student['name'],
                     "ID": student['student_id'],
-                    "Source": score if is_present else "-",
-                    "Status": "✅ Present" if is_present else "❌ Absent"
+                    "Source": f"{float(score):.2f}" if is_present else "-",
+                    "Status": "Present" if is_present else "Absent"
                 })
 
                 attendance_to_log.append({

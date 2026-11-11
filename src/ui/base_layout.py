@@ -145,8 +145,23 @@ def _style_portal_scope(
                 color: #4B5563 !important;
             }}
 
-            .st-key-{scope_key} [data-testid="stMarkdownContainer"] div[style*="EB459E10"] {{
+            .st-key-{scope_key} .subject-card .subject-card-stat-badge {{
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 6px !important;
                 color: #30343B !important;
+                font-family: 'Outfit', sans-serif !important;
+                font-weight: 500 !important;
+                line-height: 1.35 !important;
+            }}
+
+            .st-key-{scope_key} .subject-card .subject-card-stat-badge .sc-icon {{
+                color: #5865F2 !important;
+            }}
+
+            .st-key-{scope_key} .subject-card .subject-card-stat-badge b.subject-card-stat-value {{
+                color: #202B3F !important;
+                font-weight: 700 !important;
             }}
             {extra_rules}
 
@@ -176,23 +191,9 @@ def style_student_portal():
 
 def style_teacher_portal():
     """Apply scoped typography and high-contrast colors for the Teacher Portal."""
-    teacher_badge_rules = """
-            .st-key-teacher_portal .subject-card .subject-card-stat-badge {
-                color: #30343B !important;
-                font-family: 'Outfit', sans-serif !important;
-                font-weight: 500 !important;
-                line-height: 1.35 !important;
-            }
-
-            .st-key-teacher_portal .subject-card .subject-card-stat-badge b.subject-card-stat-value {
-                color: #202B3F !important;
-                font-weight: 700 !important;
-            }
-    """
     _style_portal_scope(
         "teacher_portal",
         "teacher",
-        extra_rules=teacher_badge_rules,
         include_generic_headings=False,
     )
     
@@ -265,6 +266,40 @@ def style_base_layout():
 
             button:hover{
                 transform :scale(1.05)}
+
+            .sc-icon {
+                font-family: 'Material Symbols Rounded', sans-serif !important;
+                font-weight: 400 !important;
+                font-style: normal !important;
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                font-feature-settings: 'liga';
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                vertical-align: middle;
+                line-height: 1;
+                flex-shrink: 0;
+                user-select: none;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .sc-icon-sm {
+                font-size: 1rem !important;
+            }
+
+            .sc-icon-md {
+                font-size: 1.15rem !important;
+            }
+
+            .sc-icon-lg {
+                font-size: 1.45rem !important;
+            }
+
+            .sc-heading-icon {
+                vertical-align: -0.14em;
+                margin-right: 0.45rem;
+                color: #5865F2;
+            }
         </style>  
 
                 """
