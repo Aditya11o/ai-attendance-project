@@ -185,9 +185,3 @@ Open **`http://localhost:8501`** in your browser and grant **Camera** and **Micr
 - **Subject-Scoped Recognition:** Face matching currently loads all registered students rather than filtering strictly to students enrolled in the selected subject.
 - **Attendance Overrides & Exports:** Manual toggling in the confirmation modal, duplicate same-day session checks, and CSV/PDF report exports are planned for future iterations.
 - **Share URL Domain:** `src/components/dialog_share_subject.py` defaults to `https://snapclass-360.streamlit.app` (`DEFAULT_APP_URL`); update it when deploying to a different host.
-
----
-
-## Credits
-
-- Built and customized by **Group A** based on the [ai-attendance-project-app](https://github.com/shradha-khapra/ai-attendance-project-app) foundation.
