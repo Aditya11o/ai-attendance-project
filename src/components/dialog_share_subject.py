@@ -1,14 +1,24 @@
-import streamlit as st
-from src.components.icons import html_icon, st_icon
+from urllib.parse import quote
+import io
 
 import segno
-import io
+import streamlit as st
+
+from src.components.icons import html_icon, st_icon
+
+DEFAULT_APP_URL = "https://snapclass-360.streamlit.app"
+
+
+def build_join_url(subject_code: str, base_url: str = DEFAULT_APP_URL) -> str:
+    """Build a full HTTPS join URL with an encoded join-code query parameter."""
+    normalized_base = base_url.rstrip("/")
+    encoded_code = quote(str(subject_code).strip(), safe="")
+    return f"{normalized_base}/?join-code={encoded_code}"
 
 
 @st.dialog("Share Class Link")
 def share_subject_dialog(subject_name, subject_code):
-    app_domain = "snapclass-main.streamlit.app"
-    join_url = f"{app_domain}/?join-code={subject_code}"
+    join_url = build_join_url(subject_code)
 
     st.header("Scan to Join")
 

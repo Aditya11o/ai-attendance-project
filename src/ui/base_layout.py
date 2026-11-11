@@ -267,6 +267,11 @@ def style_base_layout():
             button:hover{
                 transform :scale(1.05)}
 
+            [data-testid="stCameraInput"] [data-testid="stCameraInputButton"] {
+                margin-top: 1.125rem !important;
+                width: 100% !important;
+            }
+
             .sc-icon {
                 font-family: 'Material Symbols Rounded', sans-serif !important;
                 font-weight: 400 !important;
